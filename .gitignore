@@ -3,12 +3,12 @@
 /test/
 custom-elements.json
 # top level source
-my-element.js
-my-element.js.map
-my-element.d.ts
-my-element.d.ts.map
+comment-thread.js
+comment-thread.js.map
+comment-thread.d.ts
+comment-thread.d.ts.map
 # only generated for size check
-my-element.bundled.js
+comment-thread.bundled.js
 
 # Idea
 .idea/

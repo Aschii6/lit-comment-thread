@@ -1,27 +1,27 @@
 ---
 layout: page.11ty.cjs
-title: <my-element> ⌲ Home
+title: <comment-thread> ⌲ Home
 ---
 
-# &lt;my-element>
+# &lt;comment-thread>
 
-`<my-element>` is an awesome element. It's a great introduction to building web components with LitElement, with nice documentation site as well.
+`<comment-thread>` is an awesome element. It's a great introduction to building web components with LitElement, with nice documentation site as well.
 
 ## As easy as HTML
 
 <section class="columns">
   <div>
 
-`<my-element>` is just an HTML element. You can it anywhere you can use HTML!
+`<comment-thread>` is just an HTML element. You can it anywhere you can use HTML!
 
 ```html
-<my-element></my-element>
+<comment-thread></comment-thread>
 ```
 
   </div>
   <div>
 
-<my-element></my-element>
+<comment-thread></comment-thread>
 
   </div>
 </section>
@@ -31,16 +31,16 @@ title: <my-element> ⌲ Home
 <section class="columns">
   <div>
 
-`<my-element>` can be configured with attributed in plain HTML.
+`<comment-thread>` can be configured with attributed in plain HTML.
 
 ```html
-<my-element name="HTML"></my-element>
+<comment-thread name="HTML"></comment-thread>
 ```
 
   </div>
   <div>
 
-<my-element name="HTML"></my-element>
+<comment-thread name="HTML"></comment-thread>
 
   </div>
 </section>
@@ -50,7 +50,7 @@ title: <my-element> ⌲ Home
 <section class="columns">
   <div>
 
-`<my-element>` can be used with declarative rendering libraries like Angular, React, Vue, and lit-html
+`<comment-thread>` can be used with declarative rendering libraries like Angular, React, Vue, and lit-html
 
 ```js
 import {html, render} from 'lit-html';
@@ -59,8 +59,8 @@ const name = 'lit-html';
 
 render(
   html`
-    <h2>This is a &lt;my-element&gt;</h2>
-    <my-element .name=${name}></my-element>
+    <h2>This is a &lt;comment-thread&gt;</h2>
+    <comment-thread .name=${name}></comment-thread>
   `,
   document.body
 );
@@ -69,8 +69,8 @@ render(
   </div>
   <div>
 
-<h2>This is a &lt;my-element&gt;</h2>
-<my-element name="lit-html"></my-element>
+<h2>This is a &lt;comment-thread&gt;</h2>
+<comment-thread name="lit-html"></comment-thread>
 
   </div>
 </section>
