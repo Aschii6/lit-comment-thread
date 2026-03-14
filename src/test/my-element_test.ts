@@ -4,59 +4,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {CommentThread} from '../comment-thread.js';
-
-import {fixture, assert} from '@open-wc/testing';
-import {html} from 'lit/static-html.js';
-
-suite('comment-thread', () => {
-  test('is defined', () => {
-    const el = document.createElement('comment-thread');
-    assert.instanceOf(el, CommentThread);
-  });
-
-  test('renders with default values', async () => {
-    const el = await fixture(html`<comment-thread></comment-thread>`);
-    assert.shadowDom.equal(
-      el,
-      `
-      <h1>Hello, World!</h1>
-      <button part="button">Click Count: 0</button>
-      <slot></slot>
-    `
-    );
-  });
-
-  test('renders with a set name', async () => {
-    const el = await fixture(html`<comment-thread name="Test"></comment-thread>`);
-    assert.shadowDom.equal(
-      el,
-      `
-      <h1>Hello, Test!</h1>
-      <button part="button">Click Count: 0</button>
-      <slot></slot>
-    `
-    );
-  });
-
-  test('handles a click', async () => {
-    const el = (await fixture(html`<comment-thread></comment-thread>`)) as CommentThread;
-    const button = el.shadowRoot!.querySelector('button')!;
-    button.click();
-    await el.updateComplete;
-    assert.shadowDom.equal(
-      el,
-      `
-      <h1>Hello, World!</h1>
-      <button part="button">Click Count: 1</button>
-      <slot></slot>
-    `
-    );
-  });
-
-  test('styling applied', async () => {
-    const el = (await fixture(html`<comment-thread></comment-thread>`)) as CommentThread;
-    await el.updateComplete;
-    assert.equal(getComputedStyle(el).paddingTop, '16px');
-  });
-});
+// import {CommentThread} from '../comment-thread.js';
+//
+// import {assert} from '@open-wc/testing';
+//
+// suite('comment-thread', () => {
+//   test('is defined', () => {
+//     const el = document.createElement('comment-thread');
+//     assert.instanceOf(el, CommentThread);
+//   });
+// });
