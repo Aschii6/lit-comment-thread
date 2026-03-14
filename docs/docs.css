@@ -41,14 +41,17 @@ header {
 
 footer {
   width: 100%;
-  min-height: 120px;
+  min-height: 80px;
   background: gray;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 12px;
+  align-items: center;
+  padding: 6px;
   margin-top: 64px;
+  border-top: 1px solid #efefef;
+  border-top-radius: 4px;
 }
 
 h1 {
@@ -83,7 +86,7 @@ nav {
   max-width: 100%;
   grid-template-columns: repeat(auto-fit, 240px);
   justify-content: center;
-  border-bottom: 1px solid #efefef;
+  border-bottom: 2px solid #efefef;
 }
 
 nav > a {

@@ -1,7 +1,7 @@
 ---
 layout: example.11ty.cjs
-title: <comment-thread> ⌲ Examples ⌲ Basic
-tags: example
+title: <comment-thread> Basic Examples
+tags: [example]
 name: Basic
 description: A basic example
 ---
