@@ -64,28 +64,33 @@ export class CommentThread extends LitElement {
   override render() {
     return html`
       <div>
-        <h2>Comments</h2>
+        <slot></slot>
+        <h2>Discussion</h2>
         ${this.renderCommentInput()}
         ${this.comments.length > 0
           ? html`
               ${this.comments.map((comment) => this.renderComment(comment, 0))}
             `
           : html`<h1>Discussion not started yet.</h1>`}
-        <!--<slot></slot>-->
       </div>
     `;
   }
-
 
   renderComment(comment: Comment, depth = 0): TemplateResult {
     const commUiState = this.uiState.get(comment.id) || {folded: false, inputVisible: false};
 
     return html`
-      <div class="comment" data-depth=${depth}>
-        <strong>${comment.username}</strong>
-        (${this.formatCommentDate(comment.date)}):
-        <p>${comment.content}</p>
+      <div
+        class="comment"
+        style="display: flex; flex-direction: column; row-gap: 6px;"
+      >
+        <div style="display: flex; flex-direction: row; column-gap: 6px; align-items: center; margin: 0">
+          <p style="margin: 2px"><strong>${comment.username}</strong></p>
+          <p style="margin: 2px;">(${this.formatCommentDate(comment.date)}):</p>
+        </div>
+        <p style="margin: 4px 8px">${comment.content}</p>
         <button
+          style="padding: 4px; max-width: 100px;"
           @click=${() => {
             this.uiState.set(comment.id, {
               ...commUiState,
@@ -98,7 +103,8 @@ export class CommentThread extends LitElement {
         </button>
         ${commUiState.inputVisible ? this.renderCommentInput(comment.id) : ''}
         ${comment.replies.length
-          ? html`<div class="replies">
+          ? html`
+            <div class="replies">
               ${comment.replies.map((reply) =>
                 this.renderComment(reply, depth + 1)
               )}
@@ -113,8 +119,9 @@ export class CommentThread extends LitElement {
 
     return html`
       <div class="comment-input">
-        <input ${ref(inputRef)} type="text" placeholder="Write a comment..." />
+        <input style="padding: 4px;" ${ref(inputRef)} type="text" placeholder="Write a comment..." />
         <button
+          style="padding: 4px;"
           @click=${() => {
             if (inputRef.value) {
               this.handleSubmit(inputRef.value, parentId);
