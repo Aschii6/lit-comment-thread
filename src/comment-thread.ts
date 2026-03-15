@@ -2,20 +2,17 @@
  * @license
  */
 
-import {LitElement, html, css} from 'lit';
+import {LitElement, html, css, TemplateResult} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {ref, createRef} from 'lit/directives/ref.js'
 
 type Comment = {
   id: number;
-  user: string;
+  username: string;
   content: string;
-  timestamp: Date;
+  date: Date;
   replies: Comment[];
-}
-
-type Thread = {
-  comments: Comment[];
-}
+};
 
 /**
  * A comment thread component.
@@ -29,21 +26,119 @@ export class CommentThread extends LitElement {
       width: 100%;
       box-sizing: border-box;
       display: block;
-      border: solid 1px gray;
-      padding: 16px;
+    }
+
+    .comment {
+      padding-block: 8px;
+    }
+
+    .replies {
+      padding-inline-start: 16px;
     }
   `;
 
-  @property()
-  thread: Thread = { comments: [] };
+  @property({attribute: false}) comments: Comment[] = [];
 
   override render() {
+    return html`
+      <div>
+        <h2>Comments</h2>
+        ${this.renderCommentInput(0)}
+        ${this.comments.length > 0
+          ? html`
+              ${this.comments.map((comment) => this.renderComment(comment, 0))}
+            `
+          : html`<h1>Discussion not started yet.</h1>`}
+        <!--<slot></slot>-->
+      </div>
+    `;
+  }
+
+  /*renderCommentInput(parentId?: number): TemplateResult {
+    let inputEl: HTMLInputElement;
 
     return html`
-      <!--<slot></slot>-->
+      <div class="comment-input">
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          ${(el: HTMLInputElement) => (inputEl = el)}
+        />
+        <button @click=${() => this.handleSubmit(inputEl, parentId)}>Submit</button>
+      </div>
+    `;
+  }
+
+  handleSubmit(input: HTMLInputElement, parentId?: number) {
+    const content = input.value.trim();
+    if (content) {
+      this.submitComment(content, parentId);
+      input.value = '';
+    }
+  }*/
+
+  renderCommentInput(parentId?: number): TemplateResult {
+    const inputRef = createRef<HTMLInputElement>();
+
+    return html`
+      <div class="comment-input">
+        <input ${ref(inputRef)} type="text" placeholder="Write a comment..." />
+        <button
+          @click=${() => {
+            if (inputRef.value) {
+              this.handleSubmit(inputRef.value, parentId);
+            }
+          }}
+        >
+          Submit
+        </button>
+      </div>
+    `;
+  }
+
+  handleSubmit(input: HTMLInputElement, parentId?: number) {
+    const content = input.value.trim();
+    if (content) {
+      this.submitComment(content, parentId);
+      input.value = '';
+    }
+  }
+
+  submitComment(content: string, parentId?: number) {
+    this.dispatchEvent(
+      new CustomEvent('submit-comment', {
+        detail: {content, parentId},
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  private formatCommentDate(date: Date): string {
+    return Number.isNaN(date.getTime())
+      ? 'Invalid date'
+      : date.toLocaleString();
+  }
+
+  renderComment(comment: Comment, depth = 0): TemplateResult {
+    return html`
+      <div class="comment" data-depth=${depth}>
+        <strong>${comment.username}</strong>
+        (${this.formatCommentDate(comment.date)}):
+        <p>${comment.content}</p>
+        ${comment.replies.length
+          ? html`<div class="replies">
+              ${comment.replies.map((reply) =>
+                this.renderComment(reply, depth + 1)
+              )}
+            </div>`
+          : ``}
+      </div>
     `;
   }
 }
+
+// customElements.define('comment-thread', CommentThread);
 
 declare global {
   interface HTMLElementTagNameMap {

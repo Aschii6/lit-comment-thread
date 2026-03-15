@@ -1,17 +1,99 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title><comment-thread> Demo</title>
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../node_modules/lit/polyfill-support.js"></script>
     <script type="module" src="../comment-thread.js"></script>
-    <style>
-    </style>
+    <style></style>
   </head>
   <body>
-    <comment-thread>
-    </comment-thread>
+    <comment-thread id="thread"></comment-thread>
+
+    <script>
+      let comments = [
+        {
+          id: 1,
+          username: 'Alice',
+          content: 'This is a comment.',
+          date: new Date('2024-06-12T10:00:00'),
+          replies: [
+            {
+              id: 2,
+              username: 'Bob',
+              content: 'This is a reply.',
+              date: new Date('2024-06-12T10:05:00'),
+              replies: [
+                {
+                  id: 4,
+                  username: 'Dave',
+                  content: 'This is a nested reply.',
+                  date: new Date('2024-06-13T12:10:00'),
+                  replies: [],
+                },
+              ],
+            },
+            {
+              id: 5,
+              username: 'Eve',
+              content: 'This is another reply.',
+              date: new Date('2024-07-21T14:30:00'),
+              replies: [],
+            },
+          ],
+        },
+        {
+          id: 3,
+          username: 'Charlie',
+          content: 'This is another comment.',
+          date: new Date('2025-05-03T11:00:00'),
+          replies: [],
+        },
+      ];
+      let commentsLength = 5;
+
+      const currentUsername = 'Alice';
+
+      const thread = document.getElementById('thread');
+      thread.comments = comments;
+
+      const addCommentToThread = (comments, newComment, parentId) => {
+        if (parentId === null || parentId === 0) {
+          comments.push(newComment);
+          return true;
+        }
+
+        for (let comment of comments) {
+          if (comment.id === parentId) {
+            comment.replies.push(newComment);
+            return true;
+          }
+          if (addCommentToThread(comment.replies, newComment, parentId)) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      thread.addEventListener('submit-comment', (event) => {
+        const {content, parentId} = event.detail;
+        const newComment = {
+          id: ++commentsLength,
+          username: currentUsername,
+          content,
+          date: new Date(),
+          replies: [],
+        };
+
+        console.log(parentId, newComment);
+
+        const success = addCommentToThread(comments, newComment, parentId);
+        if (success) {
+          thread.comments = [...comments]; // Trigger re-render
+        }
+      });
+    </script>
   </body>
 </html>

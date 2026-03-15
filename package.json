@@ -1,8 +1,8 @@
 {
-  "name": "@lit/lit-starter-ts",
+  "name": "@aschii-webc/comment-thread",
   "private": true,
-  "version": "2.0.3",
-  "description": "A simple web component",
+  "version": "1.0.0",
+  "description": "A comment thread web component",
   "main": "comment-thread.js",
   "module": "comment-thread.js",
   "type": "module",
@@ -38,7 +38,7 @@
     "typescript",
     "lit"
   ],
-  "author": "Google LLC",
+  "author": "Aschii6",
   "license": "BSD-3-Clause",
   "dependencies": {
     "lit": "^3.2.0"
