@@ -59,24 +59,6 @@
       const thread = document.getElementById('thread');
       thread.comments = comments;
 
-      const addCommentToThread = (comments, newComment, parentId) => {
-        if (parentId === null || parentId === 0) {
-          comments.push(newComment);
-          return true;
-        }
-
-        for (let comment of comments) {
-          if (comment.id === parentId) {
-            comment.replies.push(newComment);
-            return true;
-          }
-          if (addCommentToThread(comment.replies, newComment, parentId)) {
-            return true;
-          }
-        }
-        return false;
-      };
-
       thread.addEventListener('submit-comment', (event) => {
         const {content, parentId} = event.detail;
         const newComment = {
@@ -89,10 +71,14 @@
 
         console.log(parentId, newComment);
 
-        const success = addCommentToThread(comments, newComment, parentId);
-        if (success) {
-          thread.comments = [...comments]; // Trigger re-render
-        }
+        dispatchEvent(
+          new CustomEvent('add-comment', {
+            detail: {
+              comment: newComment,
+              parentId,
+            },
+          })
+        );
       });
     </script>
   </body>

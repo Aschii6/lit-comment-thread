@@ -4,7 +4,7 @@
 
 import {LitElement, html, css, TemplateResult} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import {ref, createRef} from 'lit/directives/ref.js'
+import {ref, createRef} from 'lit/directives/ref.js';
 
 type Comment = {
   id: number;
@@ -37,6 +37,22 @@ export class CommentThread extends LitElement {
     }
   `;
 
+  override connectedCallback() {
+    super.connectedCallback();
+
+    window.addEventListener('add-comment', (event: Event) =>
+      this.handleCommentAdded(event as CustomEvent)
+    );
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+
+    window.removeEventListener('add-comment', (event: Event) =>
+      this.handleCommentAdded(event as CustomEvent)
+    );
+  }
+
   @property({attribute: false}) comments: Comment[] = [];
 
   override render() {
@@ -53,29 +69,6 @@ export class CommentThread extends LitElement {
       </div>
     `;
   }
-
-  /*renderCommentInput(parentId?: number): TemplateResult {
-    let inputEl: HTMLInputElement;
-
-    return html`
-      <div class="comment-input">
-        <input
-          type="text"
-          placeholder="Write a comment..."
-          ${(el: HTMLInputElement) => (inputEl = el)}
-        />
-        <button @click=${() => this.handleSubmit(inputEl, parentId)}>Submit</button>
-      </div>
-    `;
-  }
-
-  handleSubmit(input: HTMLInputElement, parentId?: number) {
-    const content = input.value.trim();
-    if (content) {
-      this.submitComment(content, parentId);
-      input.value = '';
-    }
-  }*/
 
   renderCommentInput(parentId?: number): TemplateResult {
     const inputRef = createRef<HTMLInputElement>();
@@ -113,6 +106,34 @@ export class CommentThread extends LitElement {
       })
     );
   }
+
+  handleCommentAdded(event: CustomEvent) {
+    const {comment, parentId} = event.detail;
+    this.addCommentToThread(this.comments, comment, parentId);
+    this.requestUpdate();
+  }
+
+  addCommentToThread = (
+    comments: Comment[],
+    newComment: Comment,
+    parentId: number | undefined
+  ) => {
+    if (parentId === null || parentId === 0) {
+      comments.push(newComment);
+      return true;
+    }
+
+    for (const comment of comments) {
+      if (comment.id === parentId) {
+        comment.replies.push(newComment);
+        return true;
+      }
+      if (this.addCommentToThread(comment.replies, newComment, parentId)) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   private formatCommentDate(date: Date): string {
     return Number.isNaN(date.getTime())
