@@ -15,19 +15,19 @@
     <script>
       let comments = [
         {
-          id: 1,
+          id: '1',
           username: 'Alice',
           content: 'This is a comment.',
           date: new Date('2024-06-12T10:00:00'),
           replies: [
             {
-              id: 2,
+              id: '2',
               username: 'Bob',
               content: 'This is a reply.',
               date: new Date('2024-06-12T10:05:00'),
               replies: [
                 {
-                  id: 4,
+                  id: '4',
                   username: 'Dave',
                   content: 'This is a nested reply.',
                   date: new Date('2024-06-13T12:10:00'),
@@ -36,7 +36,7 @@
               ],
             },
             {
-              id: 5,
+              id: '5',
               username: 'Eve',
               content: 'This is another reply.',
               date: new Date('2024-07-21T14:30:00'),
@@ -45,7 +45,7 @@
           ],
         },
         {
-          id: 3,
+          id: '3',
           username: 'Charlie',
           content: 'This is another comment.',
           date: new Date('2025-05-03T11:00:00'),
@@ -62,7 +62,7 @@
       thread.addEventListener('submit-comment', (event) => {
         const {content, parentId} = event.detail;
         const newComment = {
-          id: ++commentsLength,
+          id: (++commentsLength).toString(),
           username: currentUsername,
           content,
           date: new Date(),

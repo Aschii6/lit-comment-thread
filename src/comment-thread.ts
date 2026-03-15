@@ -3,15 +3,20 @@
  */
 
 import {LitElement, html, css, TemplateResult} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement, property, state} from 'lit/decorators.js';
 import {ref, createRef} from 'lit/directives/ref.js';
 
 type Comment = {
-  id: number;
+  id: string;
   username: string;
   content: string;
   date: Date;
   replies: Comment[];
+};
+
+type CommentUiState = {
+  folded: boolean;
+  inputVisible: boolean;
 };
 
 /**
@@ -39,7 +44,6 @@ export class CommentThread extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-
     window.addEventListener('add-comment', (event: Event) =>
       this.handleCommentAdded(event as CustomEvent)
     );
@@ -55,11 +59,13 @@ export class CommentThread extends LitElement {
 
   @property({attribute: false}) comments: Comment[] = [];
 
+  @state() uiState: Map<string, CommentUiState> = new Map();
+
   override render() {
     return html`
       <div>
         <h2>Comments</h2>
-        ${this.renderCommentInput(0)}
+        ${this.renderCommentInput()}
         ${this.comments.length > 0
           ? html`
               ${this.comments.map((comment) => this.renderComment(comment, 0))}
@@ -70,7 +76,39 @@ export class CommentThread extends LitElement {
     `;
   }
 
-  renderCommentInput(parentId?: number): TemplateResult {
+
+  renderComment(comment: Comment, depth = 0): TemplateResult {
+    const commUiState = this.uiState.get(comment.id) || {folded: false, inputVisible: false};
+
+    return html`
+      <div class="comment" data-depth=${depth}>
+        <strong>${comment.username}</strong>
+        (${this.formatCommentDate(comment.date)}):
+        <p>${comment.content}</p>
+        <button
+          @click=${() => {
+            this.uiState.set(comment.id, {
+              ...commUiState,
+              inputVisible: !commUiState.inputVisible,
+            });
+            this.requestUpdate();
+          }}
+        >
+          ${commUiState.inputVisible ? 'Cancel' : 'Reply'}
+        </button>
+        ${commUiState.inputVisible ? this.renderCommentInput(comment.id) : ''}
+        ${comment.replies.length
+          ? html`<div class="replies">
+              ${comment.replies.map((reply) =>
+                this.renderComment(reply, depth + 1)
+              )}
+            </div>`
+          : ``}
+      </div>
+    `;
+  }
+
+  renderCommentInput(parentId?: string): TemplateResult {
     const inputRef = createRef<HTMLInputElement>();
 
     return html`
@@ -89,7 +127,7 @@ export class CommentThread extends LitElement {
     `;
   }
 
-  handleSubmit(input: HTMLInputElement, parentId?: number) {
+  handleSubmit(input: HTMLInputElement, parentId?: string) {
     const content = input.value.trim();
     if (content) {
       this.submitComment(content, parentId);
@@ -97,7 +135,7 @@ export class CommentThread extends LitElement {
     }
   }
 
-  submitComment(content: string, parentId?: number) {
+  submitComment(content: string, parentId?: string) {
     this.dispatchEvent(
       new CustomEvent('submit-comment', {
         detail: {content, parentId},
@@ -116,9 +154,9 @@ export class CommentThread extends LitElement {
   addCommentToThread = (
     comments: Comment[],
     newComment: Comment,
-    parentId: number | undefined
+    parentId?: string
   ) => {
-    if (parentId === null || parentId === 0) {
+    if (parentId === undefined) {
       comments.push(newComment);
       return true;
     }
@@ -139,23 +177,6 @@ export class CommentThread extends LitElement {
     return Number.isNaN(date.getTime())
       ? 'Invalid date'
       : date.toLocaleString();
-  }
-
-  renderComment(comment: Comment, depth = 0): TemplateResult {
-    return html`
-      <div class="comment" data-depth=${depth}>
-        <strong>${comment.username}</strong>
-        (${this.formatCommentDate(comment.date)}):
-        <p>${comment.content}</p>
-        ${comment.replies.length
-          ? html`<div class="replies">
-              ${comment.replies.map((reply) =>
-                this.renderComment(reply, depth + 1)
-              )}
-            </div>`
-          : ``}
-      </div>
-    `;
   }
 }
 
