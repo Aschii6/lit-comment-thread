@@ -29,9 +29,18 @@
                 {
                   id: '4',
                   username: 'Dave',
-                  content: 'This is a nested reply. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+                  content:
+                    'This is a nested reply. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
                   date: new Date('2024-06-13T12:10:00'),
-                  replies: [],
+                  replies: [
+                    {
+                      id: '6',
+                      username: 'Frank',
+                      content: 'This is a nested reply to the nested reply.',
+                      date: new Date('2024-07-01T09:00:00'),
+                      replies: [],
+                    },
+                  ],
                 },
               ],
             },
@@ -52,7 +61,7 @@
           replies: [],
         },
       ];
-      let commentsLength = 5;
+      let commentsLength = 6;
 
       const currentUsername = 'Alice';
 
