@@ -41,7 +41,7 @@ export class CommentThread extends LitElement {
       display: flex;
       flex-direction: column;
       row-gap: 6px;
-      margin: 8px 0;
+      margin: 4px 0;
     }
 
     .comment {
@@ -64,7 +64,7 @@ export class CommentThread extends LitElement {
     
     .content::after {
       content: '';
-      width: 16px;
+      width: 8px;
       height: 4px;
       border-bottom: 2px solid #777;
       border-bottom-left-radius: 6px;
@@ -89,9 +89,10 @@ export class CommentThread extends LitElement {
     }
 
     .reply-button {
-      padding: 6px 7px 4px 8px;
+      background-color: #ccd;
+      padding: 7px 7px 4px 8px;
       border: 2px solid #777;
-      border-radius: 8px;
+      border-radius: 16px;
       align-self: start;
     }
     
@@ -134,6 +135,8 @@ export class CommentThread extends LitElement {
     );
   }
 
+  @property() foldDepth = 2;
+
   @property({attribute: false}) comments: Comment[] = [];
 
   @state() uiState: Map<string, CommentUiState> = new Map();
@@ -158,7 +161,7 @@ export class CommentThread extends LitElement {
   }
 
   renderComment(comment: Comment, depth = 0): TemplateResult {
-    const defaultFolded = depth > 1;
+    const defaultFolded = depth >= this.foldDepth;
 
     if (!this.uiState.has(comment.id)) {
       this.uiState.set(comment.id, {
