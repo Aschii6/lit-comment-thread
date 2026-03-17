@@ -14,15 +14,25 @@ type Comment = {
   replies: Comment[];
 };
 
+/**
+ * UI state for a comment.
+ * @property {boolean} folded - Whether the comment is folded or not (its content and replies are hidden).
+ * @property {boolean} inputVisible - Whether the reply input is visible or not.
+ */
 type CommentUiState = {
   folded: boolean;
   inputVisible: boolean;
 };
 
 /**
- * A comment thread component.
- *
+ * A comment thread component. It displays a list of comments and their replies in a threaded manner.
  * @slot - This element has a slot
+ * @property foldDepth - The depth after which comments should be folded by default.
+ * @property comments - The list of comments to display in the thread.
+ * @fires submit-comment - Fired when a comment is submitted.
+ * detail: { content: string, parentId?: string }
+ * @listens add-comment - Listen for this event to add a comment to the thread.
+ * detail: { comment: Comment, parentId?: string }
  */
 @customElement('comment-thread')
 export class CommentThread extends LitElement {
@@ -61,7 +71,7 @@ export class CommentThread extends LitElement {
       flex-direction: column;
       row-gap: 6px;
     }
-    
+
     .content::after {
       content: '';
       width: 8px;
@@ -95,7 +105,7 @@ export class CommentThread extends LitElement {
       border-radius: 16px;
       align-self: start;
     }
-    
+
     .reply-button:hover {
       cursor: pointer;
     }
@@ -105,7 +115,7 @@ export class CommentThread extends LitElement {
       border: 2px solid #777;
       border-radius: 8px;
     }
-    
+
     .submit-button:hover {
       cursor: pointer;
     }
@@ -370,5 +380,10 @@ export class CommentThread extends LitElement {
 declare global {
   interface HTMLElementTagNameMap {
     'comment-thread': CommentThread;
+  }
+
+  interface HTMLElementEventMap {
+    'submit-comment': CustomEvent<{content: string; parentId?: string}>;
+    'add-comment': CustomEvent<{comment: Comment; parentId?: string}>;
   }
 }
