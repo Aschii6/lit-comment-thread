@@ -64,9 +64,10 @@ By default, the value is 2.
 ### Adding comments
 The person using the comment thread will type out their comment and press submit. The component will then dispatch an event `'submit-comment'` with the content, and optionally parentId (missing if the comment is not a reply to any comment).
 ```ts
-const {content, parentId} = event.detail;
-// content: string
-// parentId?: string
+thread.addEventListener('submit-comment', (event) => {
+  const {content, parentId} = event.detail; // content: string, parentId?: string
+  // ...
+};
 ```
 
 At this point the dev is expected to validate the comment, maybe do some calls to their APIs, and create a comment including the content, username, date, and replies.
