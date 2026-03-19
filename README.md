@@ -67,7 +67,7 @@ The person using the comment thread will type out their comment and press submit
 thread.addEventListener('submit-comment', (event) => {
   const {content, parentId} = event.detail; // content: string, parentId?: string
   // ...
-};
+});
 ```
 
 At this point the dev is expected to validate the comment, maybe do some calls to their APIs, and create a comment including the content, username, date, and replies.
