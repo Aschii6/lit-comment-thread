@@ -1,7 +1,6 @@
 {
-  "name": "@aschii-webc/comment-thread",
-  "private": true,
-  "version": "1.0.0",
+  "name": "@aschii6/comment-thread",
+  "version": "0.1.0",
   "description": "A comment thread web component",
   "main": "comment-thread.js",
   "module": "comment-thread.js",
