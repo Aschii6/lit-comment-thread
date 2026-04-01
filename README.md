@@ -2,6 +2,8 @@
 
 A Comment Thread Web Component made using Lit.
 
+[GitHub Repo](https://github.com/Aschii6/lit-comment-thread)
+
 ## Overview
 A simple web component for a Comment Thread, with minimalistic styling.
 
