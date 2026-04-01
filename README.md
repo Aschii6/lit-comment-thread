@@ -16,6 +16,11 @@ You can add a comment directly to the discussion, or reply to another comment - 
 ## Installation
 Download `comment-thread.bundled.js` from the [latest release](https://github.com/Aschii6/lit-comment-thread/releases/latest).
 
+Or install from [NPM](https://www.npmjs.com/package/@aschii6/comment-thread).
+```shell
+npm i @aschii6/comment-thread
+```
+
 ## Usage
 Import the script.
 ```html
